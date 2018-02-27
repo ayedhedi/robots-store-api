@@ -24,7 +24,7 @@ public class SwaggerConfigs {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("lu.rbc.robotsstoreapi.controller"))
+                .apis(RequestHandlerSelectors.basePackage("lu.rbc.robotsstoreapi.controllerher"))
                 .paths(PathSelectors.any())
                 .build();
     }
