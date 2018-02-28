@@ -3,6 +3,7 @@ package lu.rbc.robotsstoreapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ import lu.rbc.robotsstoreapi.service.RobotService;
 @Slf4j
 @RestController
 @RequestMapping("/api/robots")
+@CrossOrigin(origins = "*")
 public class RobotController {
 
     private final RobotService robotService;
