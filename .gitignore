@@ -110,3 +110,4 @@ crashlytics-build.properties
 fabric.properties
 
 /Procfile
+!/src/main/java/lu/rbc/robotsstoreapi/SimpleMain.java
