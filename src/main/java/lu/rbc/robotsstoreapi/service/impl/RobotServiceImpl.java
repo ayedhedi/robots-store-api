@@ -11,6 +11,7 @@ import java.util.stream.StreamSupport;
 
 import lombok.extern.slf4j.Slf4j;
 import lu.rbc.robotsstoreapi.domain.model.Robot;
+import lu.rbc.robotsstoreapi.exception.InvalidDataException;
 import lu.rbc.robotsstoreapi.exception.RobotNotFoundException;
 import lu.rbc.robotsstoreapi.repository.RobotRepository;
 import lu.rbc.robotsstoreapi.service.RobotService;
@@ -41,10 +42,18 @@ public class RobotServiceImpl implements RobotService{
      * @return the persisted {@link Robot robot} object
      */
     @Override
-    public Robot createRobot(Robot robot) {
+    public Robot createRobot(Robot robot) throws InvalidDataException {
         log.info("[SRV][ROBOT] Creating new robot instance {}", robot);
         robot.setId(null);
-        return robotRepository.save(robot);
+
+        //cannot create robot with the same code
+        Optional<Robot> robotOptional = robotRepository.findByCode(robot.getCode());
+        if (robotOptional.isPresent()) {
+            log.warn("Cannot create robot: the same code is user {}", robot.getCode());
+            throw new InvalidDataException("Robot code is used");
+        }else {
+            return robotRepository.save(robot);
+        }
     }
 
     /**
@@ -78,12 +87,17 @@ public class RobotServiceImpl implements RobotService{
      * @throws RobotNotFoundException: thrown if the robot not found
      */
     @Override
-    public Robot updateRobot(long id, Robot newRobot) throws RobotNotFoundException{
+    public Robot updateRobot(long id, Robot newRobot) throws RobotNotFoundException, InvalidDataException {
         log.info("[SRV][ROBOT] Updating robot {} ", id);
         Optional<Robot> optionalRobot = findRobotById(id);
         if (!optionalRobot.isPresent()) {
             throw new RobotNotFoundException(id);
         }else {
+            //check the the code is not used
+            if (robotRepository.findByCode(newRobot.getCode()).isPresent()){
+                throw new InvalidDataException("Robot code is used");
+            }
+
             Robot old = optionalRobot.get();
             old.setAvailable(newRobot.isAvailable());
             old.setImage(newRobot.getImage());

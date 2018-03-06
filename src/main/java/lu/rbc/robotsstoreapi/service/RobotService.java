@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import lu.rbc.robotsstoreapi.domain.model.Robot;
+import lu.rbc.robotsstoreapi.exception.InvalidDataException;
 import lu.rbc.robotsstoreapi.exception.RobotNotFoundException;
 
 /**
@@ -15,13 +16,13 @@ import lu.rbc.robotsstoreapi.exception.RobotNotFoundException;
  * @author Hedi Ayed
  */
 public interface RobotService {
-    Robot createRobot(Robot robot);
+    Robot createRobot(Robot robot) throws InvalidDataException;
 
     List<Robot> getRobots();
 
     Optional<Robot> findRobotById(long id);
 
-    Robot updateRobot(long id, Robot newRobot) throws RobotNotFoundException;
+    Robot updateRobot(long id, Robot newRobot) throws RobotNotFoundException, InvalidDataException;
 
     void deleteRobot(long id) throws RobotNotFoundException;
 }

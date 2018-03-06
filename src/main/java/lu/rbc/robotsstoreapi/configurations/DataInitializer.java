@@ -35,7 +35,7 @@ public class DataInitializer implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         if (robotRepository.count() == 0) {
-            log.info("The repository is empty: initializing robots");
+            log.info("The repository is empty: let's create some robots !!");
             try {
                 List<Robot> robots = readRobots();
                 robotRepository.save(robots);

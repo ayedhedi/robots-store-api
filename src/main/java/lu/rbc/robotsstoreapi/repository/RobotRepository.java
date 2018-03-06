@@ -2,6 +2,8 @@ package lu.rbc.robotsstoreapi.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 import lu.rbc.robotsstoreapi.domain.model.Robot;
 
 /**
@@ -13,4 +15,6 @@ import lu.rbc.robotsstoreapi.domain.model.Robot;
  * @author Hedi Ayed
  */
 public interface RobotRepository extends CrudRepository<Robot, Long> {
+
+    Optional<Robot> findByCode(String code);
 }
