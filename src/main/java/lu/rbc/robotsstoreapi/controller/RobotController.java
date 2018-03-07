@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +41,7 @@ import lu.rbc.robotsstoreapi.service.impl.RobotServiceImpl;
 @RestController
 @RequestMapping("/api/robots")
 @CrossOrigin(origins = "*")
+@PreAuthorize("hasRole('ROLE_USER')")
 public class RobotController {
 
     private final RobotServiceImpl robotService;
@@ -51,13 +55,6 @@ public class RobotController {
         this.conversionService = conversionService;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public BasicRobot createRobot(@RequestBody BasicRobot robot) throws InvalidDataException {
-        log.info("[API][POST] create new robot");
-        Robot newRobot = robotService.createRobot(conversionService.convert(robot, Robot.class));
-        return conversionService.convert(newRobot, BasicRobot.class);
-    }
 
     @GetMapping
     public List<BasicRobot> findRobots() {
@@ -80,7 +77,17 @@ public class RobotController {
         }
     }
 
+    @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public BasicRobot createRobot(@RequestBody BasicRobot robot) throws InvalidDataException {
+        log.info("[API][POST] create new robot");
+        Robot newRobot = robotService.createRobot(conversionService.convert(robot, Robot.class));
+        return conversionService.convert(newRobot, BasicRobot.class);
+    }
+
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public BasicRobot updateRobot(@PathVariable long id,
                                   @RequestBody BasicRobot robot)
@@ -92,6 +99,7 @@ public class RobotController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteRobot(@PathVariable long id) throws RobotNotFoundException {
         log.info("[API][GET] delete robot {} ", id);

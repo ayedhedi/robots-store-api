@@ -116,6 +116,8 @@ public class RobotServiceTest {
         Mockito.when(robotRepository.save(any(Robot.class))).thenReturn(robot);
         Mockito.when(robotRepository.findOne(robot.getId()))
                 .thenReturn(RobotFixture.createRandomRobot());
+        Mockito.when(robotRepository.findByCode(robot.getCode()))
+                .thenReturn(Optional.empty());
 
         //When
         Robot newRobot = robotService.updateRobot(robot.getId(), robot);
