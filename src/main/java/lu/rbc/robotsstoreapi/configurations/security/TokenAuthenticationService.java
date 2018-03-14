@@ -24,7 +24,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
  *
  * @author Hedi Ayed
  */
-class TokenAuthenticationService {
+public class TokenAuthenticationService {
     private static final long   EXPIRATIONTIME = 864_000_000; // 10 days
     private static final String SECRET = "ThisIsASecret";
     private static final String TOKEN_PREFIX = "Bearer";
@@ -33,6 +33,14 @@ class TokenAuthenticationService {
     static String[] users = new String[]{"admin", "user"};
     private static final String[] adminRoles = new String[]{"USER", "ADMIN"};
     private static final String[] userRoles = new String[]{"USER"};
+
+    public static String getToken(String username){
+        return Jwts.builder()
+                .setSubject(username)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
+                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .compact();
+    }
 
     static String[] getUserRoles(String user) {
         String[] roles = null;
@@ -52,12 +60,7 @@ class TokenAuthenticationService {
     }
 
     static void addAuthentication(HttpServletResponse res, String username) {
-        String JWT = Jwts.builder()
-                .setSubject(username)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
-                .signWith(SignatureAlgorithm.HS512, SECRET)
-                .compact();
-        res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+        res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + getToken(username));
     }
 
     static Authentication getAuthentication(HttpServletRequest request) {
@@ -66,16 +69,20 @@ class TokenAuthenticationService {
 
         String token = request.getHeader(HEADER_STRING);
         if (token != null) {
-            // parse the token.
-            String user = Jwts.parser()
-                    .setSigningKey(SECRET)
-                    .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-                    .getBody()
-                    .getSubject();
+            try{
+                // parse the token.
+                String user = Jwts.parser()
+                        .setSigningKey(SECRET)
+                        .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+                        .getBody()
+                        .getSubject();
 
-            if (user != null) {
-                List<GrantedAuthority> authorities = getUserAuthorities(user);
-                authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+                if (user != null) {
+                    List<GrantedAuthority> authorities = getUserAuthorities(user);
+                    authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+                }
+            }catch (Exception ex){
+                //Nothing to do authentication will be null
             }
         }
 

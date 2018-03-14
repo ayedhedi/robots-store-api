@@ -79,7 +79,7 @@ public class RobotController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.CREATED)
     public BasicRobot createRobot(@RequestBody BasicRobot robot) throws InvalidDataException {
         log.info("[API][POST] create new robot");
         Robot newRobot = robotService.createRobot(conversionService.convert(robot, Robot.class));

@@ -6,6 +6,7 @@ import lu.rbc.robotsstoreapi.domain.dto.BasicRobot;
 import lu.rbc.robotsstoreapi.domain.enums.RobotCategory;
 import lu.rbc.robotsstoreapi.domain.enums.RobotFunction;
 import lu.rbc.robotsstoreapi.domain.model.Robot;
+import lu.rbc.robotsstoreapi.repository.RobotRepository;
 
 /**
  * Created by Hedi Ayed on 06/03/2018.
@@ -67,5 +68,11 @@ public class RobotFixture {
         basic.setFunctions(new HashSet<>());
         robot.getFunctions().forEach(robotFunction -> basic.getFunctions().add(robotFunction));
         return basic;
+    }
+
+    public static Robot createAndSave(RobotRepository repository) {
+        Robot robot = createRandomRobot();
+        robot.setId(null);
+        return repository.save(robot);
     }
 }

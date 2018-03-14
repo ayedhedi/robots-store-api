@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -93,12 +94,15 @@ public class RobotServiceImpl implements RobotService{
         if (!optionalRobot.isPresent()) {
             throw new RobotNotFoundException(id);
         }else {
-            //check the the code is not used
-            if (robotRepository.findByCode(newRobot.getCode()).isPresent()){
+            Robot old = optionalRobot.get();
+
+            //if code is modified and already exists throws error
+            if (!Objects.equals(old.getCode(), newRobot.getCode()) &&
+                    robotRepository.findByCode(newRobot.getCode()).isPresent()){
                 throw new InvalidDataException("Robot code is used");
             }
 
-            Robot old = optionalRobot.get();
+
             old.setAvailable(newRobot.isAvailable());
             old.setImage(newRobot.getImage());
             old.setQuantity(newRobot.getQuantity());
