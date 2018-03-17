@@ -1,6 +1,8 @@
 package lu.rbc.robotsstoreapi.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -131,5 +133,17 @@ public class RobotServiceImpl implements RobotService{
         }else {
             robotRepository.delete(id);
         }
+    }
+
+    /**
+     * Find one page of robots
+     * @param pageable the size and number of the page to return
+     * @return one page of robot
+     */
+    @Override
+    public Page<Robot> getByPage(Pageable pageable) {
+        log.info("[SRV][ROBOT] Looking for page {}/{}",
+                pageable.getPageNumber(), pageable.getPageSize());
+        return robotRepository.findAll(pageable);
     }
 }

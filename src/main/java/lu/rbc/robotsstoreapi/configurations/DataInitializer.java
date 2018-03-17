@@ -38,6 +38,11 @@ public class DataInitializer implements InitializingBean {
             log.info("The repository is empty: let's create some robots !!");
             try {
                 List<Robot> robots = readRobots();
+                robots.forEach(robot -> {
+                    if (Math.random()<0.5){
+                        robot.setQuantity(0);
+                    }
+                });
                 robotRepository.save(robots);
             }catch ( IOException  ex) {
                 log.warn("Cannot read robots from JSON: {}", ex.getMessage());

@@ -1,6 +1,6 @@
 package lu.rbc.robotsstoreapi.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ import lu.rbc.robotsstoreapi.domain.model.Robot;
  *
  * @author Hedi Ayed
  */
-public interface RobotRepository extends CrudRepository<Robot, Long> {
+public interface RobotRepository extends PagingAndSortingRepository<Robot, Long> {
 
     Optional<Robot> findByCode(String code);
 }

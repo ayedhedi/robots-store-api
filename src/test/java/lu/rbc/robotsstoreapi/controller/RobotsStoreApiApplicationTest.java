@@ -208,7 +208,7 @@ public class RobotsStoreApiApplicationTest {
 				.content(sw.toString())
 				.contentType(MediaType.APPLICATION_JSON))
 		//Then
-				.andExpect(status().is(202))
+				.andExpect(status().is(201))
 				.andReturn()
 				.getResponse()
 				.getContentAsString();

@@ -1,5 +1,8 @@
 package lu.rbc.robotsstoreapi.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -25,4 +28,6 @@ public interface RobotService {
     Robot updateRobot(long id, Robot newRobot) throws RobotNotFoundException, InvalidDataException;
 
     void deleteRobot(long id) throws RobotNotFoundException;
+
+    Page<Robot> getByPage(Pageable pageable);
 }
