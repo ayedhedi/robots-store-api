@@ -2,6 +2,7 @@ package lu.rbc.robotsstoreapi.domain.dto;
 
 import java.util.Collection;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,8 @@ import lu.rbc.robotsstoreapi.domain.enums.RobotFunction;
  *
  * @author Hedi Ayed
  */
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class BasicRobot {
